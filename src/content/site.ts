@@ -8,8 +8,7 @@ export const site = {
   headline: "Modernizing Fulfillment. Unlocking Growth.",
   url: "https://nexorasmartflow.vercel.app",
 
-  // PENDING: replace with a mailbox that actually receives mail.
-  contactEmail: "contact@example.com" as string,
+  contactEmail: "contact@nexora.com" as string,
   // Optional. Leave empty ("") to hide.
   phone: "" as string,
   location: "" as string,
