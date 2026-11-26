@@ -43,7 +43,7 @@ const howWeWork = [
 // One team, grouped by what each person owns on your project.
 const groups = [
   { title: "Leadership and delivery", members: team.slice(0, 2) },
-  { title: "Engineering", members: team.slice(2, 6) },
+  { title: "Engineering", members: [team[5], ...team.slice(2, 5)] },
   { title: "Business case and customer success", members: team.slice(6) },
 ];
 
@@ -160,7 +160,7 @@ export default function AboutPage() {
           <div className="mt-12 grid gap-10 lg:grid-cols-3 lg:gap-8">
             {groups.map((g) => (
               <section key={g.title} aria-labelledby={`team-${g.title}`}>
-                <h3 id={`team-${g.title}`} className="border-b-2 border-navy pb-3 text-lg font-bold">
+                <h3 id={`team-${g.title}`} className="border-b-2 border-navy pb-3 text-lg font-bold lg:flex lg:min-h-[4.5rem] lg:items-end">
                   {titleCase(g.title)}
                 </h3>
                 <ul className="divide-y divide-line">
