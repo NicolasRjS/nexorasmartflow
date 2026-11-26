@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Lato, Poppins } from "next/font/google";
+import { DemoProvider } from "@/components/interactive/DemoProvider";
+import { BackToTop } from "@/components/nav/BackToTop";
+import { PageJourney } from "@/components/nav/PageJourney";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { site } from "@/content/site";
@@ -41,7 +44,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#102C3B",
+  themeColor: "#FFFFFF",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -50,15 +54,19 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="flex min-h-screen flex-col">
         <a
           href="#main"
-          className="sr-only z-50 rounded-md bg-amber px-4 py-3 font-display font-semibold text-navy focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+          className="sr-only z-50 rounded-lg bg-amber px-4 py-3 font-display font-semibold text-navy focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
         >
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
-          {children}
-        </main>
-        <SiteFooter />
+        <DemoProvider>
+          <SiteHeader />
+          <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
+            {children}
+            <PageJourney />
+          </main>
+          <SiteFooter />
+          <BackToTop />
+        </DemoProvider>
       </body>
     </html>
   );

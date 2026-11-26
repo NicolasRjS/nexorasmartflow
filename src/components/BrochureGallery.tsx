@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { Modal } from "./interactive/Modal";
 
 const pages = [
   {
@@ -20,83 +21,81 @@ const pages = [
   },
 ];
 
-/** Brochure thumbnails that open a larger view in a native dialog. */
+/** Brochure thumbnails that open a larger view in an accessible modal. */
 export function BrochureGallery() {
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState(0);
   const page = pages[current];
-
-  const open = (i: number) => {
-    setCurrent(i);
-    dialogRef.current?.showModal();
-  };
+  const other = pages[(current + 1) % pages.length];
 
   return (
     <>
       <ul className="grid gap-6 md:grid-cols-2">
         {pages.map((p, i) => (
           <li key={p.full}>
-            <a
-              href={p.full}
-              onClick={(e) => {
-                e.preventDefault();
-                open(i);
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              onClick={() => {
+                setCurrent(i);
+                setOpen(true);
               }}
-              className="group block overflow-hidden rounded-xl border border-line bg-white transition-shadow hover:shadow-lg hover:shadow-navy/10"
+              className="group block w-full cursor-pointer overflow-hidden rounded-2xl border border-line bg-white text-left transition-shadow hover:shadow-[0_18px_40px_-24px_rgb(16_44_59/0.45)]"
             >
-              <Image
-                src={p.thumb}
-                alt={p.alt}
-                width={720}
-                height={556}
-                className="h-auto w-full transition-transform duration-300 group-hover:scale-[1.02]"
-              />
+              <span className="block overflow-hidden">
+                <Image
+                  src={p.thumb}
+                  alt={p.alt}
+                  width={720}
+                  height={556}
+                  className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              </span>
               <span className="flex items-center justify-between gap-3 border-t border-line px-5 py-4">
                 <span>
                   <span className="block font-display font-semibold">{p.title}</span>
                   <span className="block text-sm text-slate">{p.caption}</span>
                 </span>
-                <span className="shrink-0 font-display text-sm font-semibold text-deep group-hover:underline">
+                <span className="inline-flex shrink-0 items-center gap-1.5 font-display text-sm font-semibold text-deep underline decoration-2 underline-offset-4 group-hover:decoration-amber">
+                  <svg viewBox="0 0 16 16" className="h-4 w-4" aria-hidden="true">
+                    <path d="M7 3H3v4M9 13h4V9M3 3l4.5 4.5M13 13L8.5 8.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  </svg>
                   Enlarge<span className="sr-only"> the {p.title.toLowerCase()} of the brochure</span>
                 </span>
               </span>
-            </a>
+            </button>
           </li>
         ))}
       </ul>
 
-      <dialog
-        ref={dialogRef}
-        aria-label={`Brochure, ${page.title.toLowerCase()}`}
-        className="on-dark m-auto max-h-[95vh] w-[min(96vw,1400px)] overflow-auto rounded-xl bg-navy p-0 text-white backdrop:bg-navy/80"
-        onClick={(e) => {
-          if (e.target === e.currentTarget) dialogRef.current?.close();
-        }}
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        title={`Brochure · ${page.title}`}
+        description={`${page.caption} (${current + 1} of ${pages.length})`}
+        size="xl"
+        tone="dark"
+        headerExtra={
+          <button
+            type="button"
+            className="btn-close btn-close-dark"
+            onClick={() => setCurrent((c) => (c + 1) % pages.length)}
+          >
+            Show the {other.title}
+          </button>
+        }
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between gap-3 bg-navy px-4 py-3">
-          <p className="font-display font-semibold">
-            Brochure · {page.title} ({current + 1} of {pages.length})
-          </p>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              className="min-h-11 rounded-md border border-white/40 px-4 font-display text-sm font-semibold hover:bg-white/10"
-              onClick={() => setCurrent((c) => (c + 1) % pages.length)}
-            >
-              {current === 0 ? "Inside" : "Outside"}
-            </button>
-            <button
-              type="button"
-              autoFocus
-              className="min-h-11 rounded-md bg-amber px-4 font-display text-sm font-semibold text-navy hover:bg-amber-dark"
-              onClick={() => dialogRef.current?.close()}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-        <Image key={page.full} src={page.full} alt={page.alt} width={1800} height={1390} loading="eager" sizes="96vw" className="h-auto w-full" />
-      </dialog>
+        <Image
+          key={page.full}
+          src={page.full}
+          alt={page.alt}
+          width={1800}
+          height={1390}
+          loading="eager"
+          sizes="96vw"
+          className="h-auto w-full rounded-lg"
+        />
+      </Modal>
     </>
   );
 }

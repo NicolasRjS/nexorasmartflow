@@ -1,10 +1,13 @@
+import Image from "next/image";
+import { titleCase } from "@/lib/titleCase";
 import Link from "next/link";
-import { ConveyorBand } from "@/components/ConveyorBand";
-import { HeroIllustration } from "@/components/HeroIllustration";
-import { InstitutionalVideo } from "@/components/InstitutionalVideo";
-import { Arrow, CtaBand, HeroGrid, SectionHeading } from "@/components/ui";
-import { modules, notIncluded, reasons } from "@/content/data";
-import { site } from "@/content/site";
+import { ChapterVideo } from "@/components/ChapterVideo";
+import { HeroBackground, HeroRoute } from "@/components/HeroMedia";
+import { ActionButton } from "@/components/interactive/DemoProvider";
+import { PickRouteToggle } from "@/components/PickRouteToggle";
+import { Arrow, CtaBand, PlayIcon, SectionHeading } from "@/components/ui";
+import { customers, modules, notIncluded, reasons, videoScenes } from "@/content/data";
+import { media, site } from "@/content/site";
 
 const highlights = [
   { value: "+73%", label: "peak orders per day", customer: "Moda Andina Logistics", href: "/results#moda-andina" },
@@ -13,155 +16,264 @@ const highlights = [
   { value: "−69%", label: "near-misses per year", customer: "TecnoSur Distribución", href: "/results#tecnosur" },
 ];
 
+const homeChapters = videoScenes.filter((s) => ["0:10", "0:24", "1:25", "1:42", "2:10"].includes(s.time));
+
+const institutionalVideo = {
+  title: "Nexora institutional video",
+  description: `${media.videoLength} · who we are, how every project runs and the results at three Peruvian operations.`,
+  src: media.video,
+  poster: media.videoPoster,
+  captions: "/media/nexora-institutional-video.vtt",
+};
+
 export default function Home() {
   return (
     <>
-      {/* Hero */}
+      {/* Hero: headline and the page's one call to action, beside our own warehouse footage. */}
       <section className="on-dark relative overflow-hidden bg-navy text-white">
-        <HeroGrid />
-        <div className="container-x relative grid items-center gap-12 py-16 md:py-24 lg:grid-cols-[1.1fr_1fr]">
+        <HeroBackground />
+        <div className="container-x relative grid gap-10 pt-14 pb-14 md:min-h-[38rem] md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] md:items-center md:pt-20 lg:min-h-[42rem] lg:pb-20">
           <div>
-            <p className="eyebrow">{site.product}</p>
-            <h1 className="mt-4 text-4xl font-bold text-white sm:text-5xl lg:text-[3.4rem]">{site.headline}</h1>
-            <p className="mt-4 font-display text-xl text-teal italic">{site.tagline}</p>
-            <p className="measure mt-6 text-lg text-white/85">
-              We modernize the distribution center you already run. SmartFlow 360 adds capacity, cuts walking and
-              makes the floor safer, inside your existing building, with your existing WMS and within your budget.
+            <p className="rise flex items-center gap-3 font-display text-[0.95rem] font-semibold text-white/90">
+              <span className="h-1 w-8 rounded-full bg-amber" aria-hidden="true" />
+              {site.tagline}
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link href="/capacity-planner" className="btn btn-primary">
-                Size your peak hour
+            <h1 className="display-1 rise rise-2 mt-6 text-white">
+              Modernizing Fulfillment. <span className="text-teal">Unlocking Growth.</span>
+            </h1>
+            <p className="lead rise rise-3 mt-6">
+              We modernize the distribution center you already run. SmartFlow 360 adds capacity, cuts walking and makes
+              the floor safer, inside your existing building, with your existing WMS and within your budget.
+            </p>
+            <div className="rise rise-4 mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+              <ActionButton action={{ kind: "demo" }} className="btn btn-primary btn-lg">
+                Book a Demo
                 <Arrow />
-              </Link>
-              <Link href="/results" className="btn btn-outline-light">
-                See verified results
-              </Link>
+              </ActionButton>
+              <ActionButton
+                action={{ kind: "video", video: institutionalVideo }}
+                className="arrow-link min-h-11 cursor-pointer text-[1rem]"
+              >
+                <PlayIcon />
+                Watch the {media.videoLength} film
+              </ActionButton>
             </div>
-            <a href="#institutional-video" className="prose-link mt-6 inline-flex items-center gap-2 text-[0.95rem]">
-              <svg viewBox="0 0 20 20" className="h-5 w-5" aria-hidden="true">
-                <circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" strokeWidth="1.8" />
-                <path d="M8 6.5v7l5.5-3.5z" fill="currentColor" />
-              </svg>
-              Watch our 2:33 institutional video
-            </a>
           </div>
-          <div className="mx-auto w-full max-w-lg">
-            <HeroIllustration />
-          </div>
-        </div>
-        <ConveyorBand />
-      </section>
 
-      {/* Institutional video: featured right after the hero */}
-      <section id="institutional-video" className="py-16 md:py-20" aria-labelledby="video-title">
-        <div className="container-x">
-          <SectionHeading
-            id="video-title"
-            eyebrow="Nexora institutional video"
-            title="See Nexora in two and a half minutes"
-            lead="Who we are, how every project runs and the results at three Peruvian operations."
-            center
-          />
-          <div className="mx-auto mt-10 max-w-4xl">
-            <InstitutionalVideo />
-          </div>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/media#brochure" className="btn btn-deep">
-              View the brochure
-            </Link>
-            <Link href="/media#video" className="btn btn-outline">
-              Read what the video shows
+          <div className="relative hidden h-full min-h-[26rem] md:block">
+            <HeroRoute className="rise rise-3 absolute inset-0 h-full w-full" />
+            <Link
+              href="/results#moda-andina"
+              className="raised group absolute right-0 bottom-6 flex max-w-xs items-center justify-between gap-4 rounded-2xl bg-white p-4 text-navy transition-transform hover:-translate-y-1"
+            >
+              <span>
+                <span className="block font-display text-3xl font-bold text-deep">1.1 → 0.5 km</span>
+                <span className="block text-sm">per pick route at Moda Andina Logistics</span>
+              </span>
+              <Arrow className="h-5 w-5 shrink-0 text-deep transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </div>
-      </section>
 
-      {/* Verified results strip */}
-      <section aria-labelledby="results-strip" className="border-b border-line bg-surface">
-        <div className="container-x py-12">
-          <div className="flex flex-col justify-between gap-2 md:flex-row md:items-end">
-            <h2 id="results-strip" className="text-xl font-semibold">
-              Verified at our reference customers
-            </h2>
-            <Link href="/results" className="prose-link text-sm">
-              See all results and videos
-            </Link>
-          </div>
-          <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {highlights.map((h) => (
-              <li key={h.label}>
-                <Link
-                  href={h.href}
-                  className="card group block h-full p-5 transition-shadow hover:shadow-lg hover:shadow-navy/5"
+        {/* Verified results strip */}
+        <div className="relative border-t border-white/10 bg-navy-3/90 backdrop-blur">
+          <div className="container-x">
+            <h2 className="sr-only">Verified at Our Reference Customers</h2>
+            <ul className="grid grid-cols-2 lg:grid-cols-4">
+              {highlights.map((h, i) => (
+                <li
+                  key={h.label}
+                  className={`border-white/10 ${i % 2 === 1 ? "border-l" : ""} ${i >= 2 ? "border-t lg:border-t-0" : ""} ${i === 2 ? "lg:border-l" : ""}`}
                 >
-                  <span className="block font-display text-4xl font-bold text-deep">{h.value}</span>
-                  <span className="mt-1 block font-semibold">{h.label}</span>
-                  <span className="mt-2 block text-sm text-slate group-hover:text-deep">{h.customer}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-4 text-sm text-slate">Every figure was verified at SAT and in load tests.</p>
+                  <Link href={h.href} className="group flex h-full flex-col px-4 py-6 transition-colors hover:bg-white/5 md:px-6 md:py-8">
+                    <span className="font-display text-[2rem] leading-none font-bold text-amber md:text-[2.6rem]">
+                      {h.value}
+                    </span>
+                    <span className="mt-2 font-semibold text-white">{h.label}</span>
+                    <span className="mt-1 flex items-center gap-1.5 text-sm text-teal">
+                      {h.customer}
+                      <Arrow className="h-3.5 w-3.5 opacity-0 transition-[transform,opacity] group-hover:translate-x-0.5 group-hover:opacity-100" />
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="border-t border-white/10 py-4 text-sm text-white/75">
+              Every figure was verified in the site acceptance test (SAT) and in load tests.{" "}
+              <Link href="/results" className="prose-link">
+                See all results and videos
+              </Link>
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Modules */}
+      {/* Bottlenecks to modules: split screen with a sticky intro */}
       <section className="py-16 md:py-24" aria-labelledby="modules-title">
-        <div className="container-x">
-          <SectionHeading
-            id="modules-title"
-            eyebrow="Four modules, one integrated system"
-            title="We fix the bottlenecks, not the whole building"
-            lead="SmartFlow 360 combines four modules. We deploy the ones your floor needs and connect them to the WMS you already use."
-          />
-          <ul className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="container-x grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <SectionHeading
+              id="modules-title"
+              title="We fix the bottlenecks, not the whole building"
+              lead="SmartFlow 360 combines four modules. We deploy the ones your floor needs and connect them to the WMS you already use."
+            />
+            <div className="mt-10 rounded-2xl bg-surface p-6 md:p-7">
+              <h3 className="text-xl font-bold">More Capacity Within the Building and Budget You Have</h3>
+              <p className="mt-2 text-slate">
+                Our value proposition is simple: more capacity, less walking and a safer floor. We get there without the
+                cost and risk of a rebuild.
+              </p>
+              <ul className="mt-5 space-y-3">
+                {notIncluded.map((n) => (
+                  <li key={n.title} className="flex items-start gap-3">
+                    <svg viewBox="0 0 24 24" className="mt-0.5 h-6 w-6 shrink-0" aria-hidden="true">
+                      <circle cx="12" cy="12" r="11" fill="#102C3B" />
+                      <path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#F4B544" strokeWidth="2.2" strokeLinecap="round" />
+                    </svg>
+                    <span>
+                      <strong className="font-display">{n.title}.</strong> <span className="text-slate">{n.text}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <ol className="space-y-4" aria-label="Bottlenecks and the module that removes each one">
             {modules.map((m) => (
-              <li key={m.id} className="card flex flex-col p-6">
-                <span
-                  className="flex h-11 w-11 items-center justify-center rounded-lg bg-navy font-display text-lg font-bold text-amber"
-                  aria-hidden="true"
+              <li key={m.id}>
+                <Link
+                  href={`/smartflow-360#${m.id}`}
+                  className="card lift group grid gap-4 p-6 hover:border-deep sm:grid-cols-[auto_1fr] md:p-7"
                 >
-                  {m.letter}
-                </span>
-                <h3 className="mt-5 text-lg font-semibold">
-                  <span className="sr-only">Module {m.letter}: </span>
-                  {m.name}
-                </h3>
-                <p className="mt-2 text-slate">{m.summary}</p>
-                <p className="mt-4 border-t border-line pt-4 text-[0.95rem]">
-                  <strong className="text-deep">You get:</strong> {m.benefit}
-                </p>
-                <Link href={`/smartflow-360#${m.id}`} className="prose-link mt-auto pt-5 text-sm">
-                  How {m.name} works<span className="sr-only"> (module {m.letter})</span>
+                  <span className="module-letter h-14 w-14 text-2xl" aria-hidden="true">
+                    {m.letter}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate">
+                      <span className="line-through decoration-before/60 decoration-2">{m.pain}</span>
+                      <Arrow className="h-3.5 w-3.5 text-slate" />
+                      <span className="font-semibold text-deep">removed by Module {m.letter}</span>
+                    </span>
+                    <span className="mt-1 block font-display text-2xl font-bold">{m.name}</span>
+                    <span className="mt-2 block text-slate">{m.summary}</span>
+                    <span className="mt-3 block">
+                      <strong className="text-deep">You get:</strong> {m.benefit}
+                    </span>
+                    <span className="mt-4 inline-flex items-center gap-2 font-display text-sm font-semibold text-deep underline decoration-2 underline-offset-4 group-hover:decoration-amber">
+                      How {m.name} works
+                      <Arrow className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </span>
                 </Link>
               </li>
             ))}
-          </ul>
+          </ol>
         </div>
       </section>
 
-      {/* Targeted modernization */}
-      <section className="bg-surface py-16 md:py-20" aria-labelledby="targeted-title">
-        <div className="container-x grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-center">
-          <div>
-            <SectionHeading
-              id="targeted-title"
-              eyebrow="A targeted modernization"
-              title="More capacity within the building and budget you have"
-              lead="Our value proposition is simple: more capacity, less walking and a safer floor. We get there without the cost and risk of a rebuild."
-            />
+      {/* Pick-route interaction, reused from Module B as the page's peak moment */}
+      <section className="bg-surface py-16 md:py-24" aria-labelledby="walk-title">
+        <div className="container-x">
+          <SectionHeading
+            id="walk-title"
+            title="Half the walking, the same orders"
+            lead="Switch the view to see how ABC slotting and zone picking shorten a typical mixed-order route."
+          />
+          <div className="mt-10">
+            <PickRouteToggle headingLevel="h3" />
           </div>
-          <ul className="grid gap-4">
-            {notIncluded.map((n) => (
-              <li key={n.title} className="flex items-start gap-4 rounded-xl border border-line bg-white p-5">
-                <svg viewBox="0 0 24 24" className="h-8 w-8 shrink-0" aria-hidden="true">
-                  <circle cx="12" cy="12" r="11" fill="#102C3B" />
-                  <path d="M8 8l8 8M16 8l-8 8" stroke="#F4B544" strokeWidth="2.2" strokeLinecap="round" />
-                </svg>
-                <div>
-                  <h3 className="text-lg font-semibold">{n.title}</h3>
-                  <p className="mt-1 text-slate">{n.text}</p>
+        </div>
+      </section>
+
+      {/* Institutional video with chapters */}
+      <section id="institutional-video" className="py-16 md:py-24" aria-labelledby="video-title">
+        <div className="container-x">
+          <ChapterVideo
+            chapters={homeChapters}
+            heading={
+              <SectionHeading
+                id="video-title"
+                title="See Nexora in two and a half minutes"
+                lead="Who we are, how every project runs and the results at three Peruvian operations. Pick a chapter to jump straight to it."
+              />
+            }
+            note={
+              <p className="mt-6">
+                <Link href="/media#video" className="arrow-link">
+                  Read every scene of the video
+                  <Arrow />
+                </Link>
+              </p>
+            }
+          />
+        </div>
+      </section>
+
+      {/* Customer clips: teasers that play in a lightbox; the full results live on /results */}
+      <section className="on-dark bg-navy py-16 text-white md:py-24" aria-labelledby="clips-title">
+        <div className="container-x">
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <SectionHeading
+              id="clips-title"
+              title="See it running at three operations"
+              lead="Each 25-second clip shows the floor before, the Nexora solution and the results verified at SAT."
+            />
+            <Link href="/results" className="arrow-link shrink-0">
+              Compare every result
+              <Arrow />
+            </Link>
+          </div>
+          <ul className="mt-10 grid gap-6 md:grid-cols-3">
+            {customers.map((c) => (
+              <li key={c.id} className="flex flex-col">
+                <ActionButton
+                  action={{
+                    kind: "video",
+                    video: {
+                      title: `${c.name}: ${c.project}`,
+                      description: c.videoText,
+                      src: c.video,
+                      poster: c.poster,
+                      captions: c.video.replace(".mp4", ".vtt"),
+                    },
+                  }}
+                  className="group relative block aspect-video w-full cursor-pointer overflow-hidden rounded-2xl bg-navy-2"
+                  aria-label={`Play the ${c.name} clip (0:25)`}
+                >
+                  <Image
+                    src={c.poster}
+                    alt=""
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                  <span className="absolute inset-0 bg-navy/25 transition-colors group-hover:bg-navy/10" aria-hidden="true" />
+                  <span
+                    className="absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full bg-amber px-4 py-2 font-display text-sm font-semibold text-navy shadow-lg"
+                    aria-hidden="true"
+                  >
+                    <svg viewBox="0 0 12 12" className="h-3 w-3">
+                      <path d="M3 1.5v9l7.5-4.5z" fill="currentColor" />
+                    </svg>
+                    Play · 0:25
+                  </span>
+                </ActionButton>
+                <div className="mt-4 flex items-start justify-between gap-4">
+                  <div>
+                    <p className="font-display text-lg font-semibold text-white">{c.name}</p>
+                    <p className="text-sm text-white/75">
+                      {c.project} · {c.location}
+                    </p>
+                  </div>
+                  <p className="shrink-0 text-right">
+                    <span className="block font-display text-2xl font-bold text-amber">{c.kpis[0].change}</span>
+                    <span className="block text-xs text-white/75">{c.kpis[0].label.toLowerCase()}</span>
+                  </p>
                 </div>
+                <Link href={`/results#${c.id}`} className="prose-link mt-3 text-sm">
+                  Full {c.name} results
+                </Link>
               </li>
             ))}
           </ul>
@@ -171,31 +283,36 @@ export default function Home() {
       {/* Reasons */}
       <section className="py-16 md:py-24" aria-labelledby="reasons-title">
         <div className="container-x">
-          <SectionHeading id="reasons-title" eyebrow="Why Nexora" title="Three reasons to choose Nexora" center />
-          <ol className="mt-12 grid gap-6 md:grid-cols-3">
+          <SectionHeading id="reasons-title" title="Three reasons to choose Nexora" />
+          <ul className="mt-10 grid border-t-2 border-navy md:grid-cols-3">
             {reasons.map((r, i) => (
-              <li key={r.title} className="card card-teal p-7">
-                <span className="font-display text-5xl font-bold text-deep" aria-hidden="true">
-                  0{i + 1}
-                </span>
-                <h3 className="mt-2 text-xl font-semibold">{r.title}</h3>
-                <p className="mt-2 text-slate">{r.text}</p>
+              <li
+                key={r.title}
+                className={`py-7 md:px-7 md:py-9 ${i > 0 ? "border-t border-line md:border-t-0 md:border-l" : ""} ${i === 0 ? "md:pl-0" : ""}`}
+              >
+                <h3 className="text-2xl font-bold">{titleCase(r.title)}</h3>
+                <p className="mt-3 text-slate">{r.text}</p>
               </li>
             ))}
-          </ol>
-          <p className="mt-10 text-center">
-            <Link href="/implementation" className="prose-link">
+          </ul>
+          <p className="mt-6">
+            <Link href="/implementation" className="arrow-link">
               See how we deliver and support every project
+              <Arrow />
             </Link>
           </p>
         </div>
       </section>
 
       <CtaBand
-        title="Tell us where your floor slows down."
-        text="Send us your peak volume and your main bottleneck. We will reply with a first view of what SmartFlow 360 can do in your building."
-        primary={{ href: "/contact", label: "Contact our team" }}
-        secondary={{ href: "/capacity-planner", label: "Try the Capacity Planner" }}
+        title="See SmartFlow 360 on your floor."
+        text="Book a working session with our engineers. Bring your peak volume and your main bottleneck; we bring a first view of what SmartFlow 360 can do in your building."
+        action={
+          <ActionButton action={{ kind: "demo" }} className="btn btn-primary btn-lg">
+            Book a Demo
+            <Arrow />
+          </ActionButton>
+        }
       />
     </>
   );

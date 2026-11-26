@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useQueryState } from "@/lib/useQueryState";
 
-type View = "before" | "after";
+const VIEWS = ["before", "after"] as const;
 
 const aisleX = [70, 150, 230, 310, 390, 470];
 
@@ -13,28 +13,21 @@ const beforeRoute =
 // After: fast movers slotted near packing; a short loop within one pick zone.
 const afterRoute = "M258 308 V286 H210 V196 H290 V286 H302 V308";
 
-export function PickRouteToggle() {
-  const [view, setView] = useState<View>("before");
+export function PickRouteToggle({ headingLevel = "h4" }: { headingLevel?: "h3" | "h4" }) {
+  const [view, setView] = useQueryState("route", VIEWS, "before");
   const before = view === "before";
+  const Heading = headingLevel;
 
   return (
-    <div className="rounded-2xl border border-line bg-white p-5 md:p-8">
+    <div className="rounded-3xl border border-line bg-white p-5 md:p-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h4 className="text-xl font-semibold">Shorter walks, same orders</h4>
+          <Heading className="text-xl font-bold md:text-2xl">Shorter walks, same orders</Heading>
           <p className="mt-1 text-sm text-slate">Engineering estimate for a typical mixed-order route. Schematic, not to scale.</p>
         </div>
-        <div className="inline-flex rounded-lg border border-line bg-surface p-1" role="group" aria-label="Choose a view">
+        <div className="segmented self-start" role="group" aria-label="Choose a view">
           {(["before", "after"] as const).map((v) => (
-            <button
-              key={v}
-              type="button"
-              aria-pressed={view === v}
-              onClick={() => setView(v)}
-              className={`min-h-11 rounded-md px-4 font-display text-sm font-semibold transition-colors ${
-                view === v ? "bg-navy text-white" : "text-navy hover:bg-white"
-              }`}
-            >
+            <button key={v} type="button" aria-pressed={view === v} onClick={() => setView(v)} className="!min-h-11 !px-4">
               {v === "before" ? "Before" : "With SmartFlow 360"}
             </button>
           ))}
@@ -42,61 +35,61 @@ export function PickRouteToggle() {
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.6fr_1fr] lg:items-center">
-        <svg
-          viewBox="0 0 560 360"
-          className="h-auto w-full rounded-xl bg-surface"
-          role="img"
-          aria-label={
-            before
-              ? "Before: a mixed order sends the picker through every aisle, about 1.0 kilometer per route."
-              : "With SmartFlow 360: fast movers sit closest to packing, so the route stays in one short zone, 0.5 kilometers or less."
-          }
-        >
-          {/* Pick zones (after) */}
-          {!before && (
-            <g opacity="0.9">
-              <rect x="20" y="24" width="160" height="256" fill="#E3F4F2" />
-              <rect x="180" y="24" width="180" height="256" fill="#FDF3DE" />
-              <rect x="360" y="24" width="180" height="256" fill="#E3F4F2" />
-            </g>
-          )}
-          {/* Racks */}
-          {aisleX.map((x) => (
-            <g key={x}>
-              <rect x={x} y="40" width="40" height="220" rx="5" fill="#CBD7DE" />
-              {!before && <rect x={x} y="200" width="40" height="60" rx="5" fill="#F4B544" />}
-            </g>
-          ))}
-          {/* Packing */}
-          <rect x="220" y="310" width="120" height="38" rx="8" fill="#102C3B" />
-          <text
-            x="280"
-            y="334"
-            textAnchor="middle"
-            fill="#FFFFFF"
-            fontFamily="var(--font-poppins), sans-serif"
-            fontSize="13"
-            fontWeight="600"
-            letterSpacing="1.5"
+        <div className="relative">
+          <svg
+            viewBox="0 0 560 360"
+            className="h-auto w-full rounded-2xl bg-surface"
+            role="img"
+            aria-label={
+              before
+                ? "Before: a mixed order sends the picker through every aisle, about 1.0 kilometer per route."
+                : "With SmartFlow 360: fast movers sit closest to packing, so the route stays in one short zone, 0.5 kilometers or less."
+            }
           >
-            PACKING
-          </text>
-          {/* Route */}
-          <path
-            key={view}
-            d={before ? beforeRoute : afterRoute}
-            fill="none"
-            stroke={before ? "#C0392B" : "#14636B"}
-            strokeWidth="5"
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            strokeDasharray={before ? "10 7" : undefined}
-          />
-        </svg>
+            {/* Pick zones (after) */}
+            {!before && (
+              <g opacity="0.9">
+                <rect x="20" y="24" width="160" height="256" fill="#E3F4F2" />
+                <rect x="180" y="24" width="180" height="256" fill="#FDF3DE" />
+                <rect x="360" y="24" width="180" height="256" fill="#E3F4F2" />
+              </g>
+            )}
+            {/* Racks */}
+            {aisleX.map((x) => (
+              <g key={x}>
+                <rect x={x} y="40" width="40" height="220" rx="5" fill="#CBD7DE" />
+                {!before && <rect x={x} y="200" width="40" height="60" rx="5" fill="#F4B544" />}
+              </g>
+            ))}
+            {/* Packing */}
+            <rect x="200" y="306" width="160" height="44" rx="10" fill="#102C3B" />
+            {/* Route */}
+            <path
+              key={view}
+              className="route-draw"
+              style={{ ["--len" as string]: before ? 3200 : 600 }}
+              d={before ? beforeRoute : afterRoute}
+              fill="none"
+              stroke={before ? "#B8352A" : "#14636B"}
+              strokeWidth="6"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+          </svg>
+          {/* HTML label so it stays readable at every width */}
+          <span
+            className="pointer-events-none absolute bottom-[3.5%] left-1/2 -translate-x-1/2 font-display text-xs font-semibold text-white sm:text-sm"
+            aria-hidden="true"
+          >
+            Packing
+          </span>
+        </div>
 
         <div aria-live="polite">
-          <p className="eyebrow">{before ? "Before" : "With SmartFlow 360"}</p>
-          <p className={`mt-2 font-display text-6xl font-bold ${before ? "text-before" : "text-deep"}`}>
+          <p className="font-display text-sm font-semibold text-slate">{before ? "Before" : "With SmartFlow 360"}</p>
+          <p
+            className={`mt-1 font-display text-5xl font-bold whitespace-nowrap md:text-6xl ${before ? "text-before" : "text-deep"}`}
+          >
             {before ? "≈1.0 km" : "≤0.5 km"}
           </p>
           <p className="mt-1 font-semibold">per pick route</p>
@@ -109,9 +102,8 @@ export function PickRouteToggle() {
         </div>
       </div>
 
-      <p className="mt-6 border-t border-line pt-5 text-sm">
-        <strong>Verified in operation:</strong> at Moda Andina Logistics, pick routes fell from 1.1 km to 0.5 km
-        (−55%).{" "}
+      <p className="mt-6 border-t border-line pt-5 text-[0.95rem]">
+        <strong>Verified in operation:</strong> at Moda Andina Logistics, pick routes fell from 1.1 km to 0.5 km (−55%).{" "}
         <Link href="/results#moda-andina" className="prose-link">
           See the Moda Andina results
         </Link>

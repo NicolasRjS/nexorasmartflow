@@ -4,6 +4,8 @@ export type Module = {
   id: string;
   letter: string;
   name: string;
+  /** The bottleneck this module removes. */
+  pain: string;
   summary: string;
   benefit: string;
   features: string[];
@@ -14,6 +16,7 @@ export const modules: Module[] = [
     id: "module-a",
     letter: "A",
     name: "Smart Material Flow",
+    pain: "Queues between stations",
     summary: "Modular conveyors, scanning, induction and sortation.",
     benefit: "Smoother order flow and fewer queues between picking, packing and dispatch.",
     features: [
@@ -27,6 +30,7 @@ export const modules: Module[] = [
     id: "module-b",
     letter: "B",
     name: "Intelligent Picking",
+    pain: "Long pick routes",
     summary: "ABC slotting, zone and batch picking, selective pick-to-light.",
     benefit: "Far less walking per pick route, so each picker completes more orders.",
     features: [
@@ -39,6 +43,7 @@ export const modules: Module[] = [
     id: "module-c",
     letter: "C",
     name: "Digital Integration",
+    pain: "Blind spots in your data",
     summary: "Your WMS stays in charge; we add execution, middleware and live KPIs.",
     benefit: "Real-time visibility of the floor without replacing the system you already trust.",
     features: [
@@ -51,6 +56,7 @@ export const modules: Module[] = [
     id: "module-d",
     letter: "D",
     name: "Safe & Scalable Operations",
+    pain: "Unsafe crossings",
     summary: "Segregated routes, protected crossings, training and modular growth.",
     benefit: "A safer floor today and room to grow tomorrow.",
     features: [
@@ -60,6 +66,33 @@ export const modules: Module[] = [
       "Controlled maintenance and modular expansion",
     ],
   },
+];
+
+// The four bottlenecks SmartFlow 360 is built around (same wording as the brochure).
+export const bottlenecks = [
+  {
+    title: "Picking to packing",
+    text: "Pickers and totes queue at packing induction.",
+  },
+  {
+    title: "Packing to staging",
+    text: "Finished orders pile up faster than they leave.",
+  },
+  {
+    title: "Replenishment crossing",
+    text: "Forklifts and people share the same path.",
+  },
+  {
+    title: "Dock approach",
+    text: "Carriers arrive in a cluster just before the cutoff.",
+  },
+];
+
+// What happens after a customer gets in touch (Contact page and simulated results).
+export const nextSteps = [
+  { title: "We read your note", text: "An engineer reviews your numbers and replies by email." },
+  { title: "We talk", text: "A short call to understand your floor, your WMS and your goals." },
+  { title: "We audit", text: "An engineering audit on site turns your data into a design." },
 ];
 
 export const reasons = [
@@ -280,4 +313,58 @@ export const team = [
     role: "Commercial and Customer Success Lead",
     text: "Customer requirements, training, hypercare and long-term partnership.",
   },
+];
+
+// On-screen content of the institutional video (it has background music and on-screen text).
+export const videoScenes = [
+  { time: "0:00", seconds: 0, title: "Smarter Flow. Stronger Performance.", text: "Intralogistics engineering from Lima, Peru." },
+  {
+    time: "0:10",
+    seconds: 10,
+    title: "Our story",
+    text: "Four engineers with one idea: move more without moving out. Founded in Lima in 2019, first integration in 2021, SmartFlow 360 in 2023, first full building in 2024 and the Arequipa office in 2025.",
+  },
+  {
+    time: "0:24",
+    seconds: 24,
+    title: "What we do",
+    text: "Engineering, not an equipment catalogue: we measure, design, integrate and sustain.",
+  },
+  {
+    time: "0:36",
+    seconds: 36,
+    title: "Five service lines",
+    text: "Flow Diagnosis, Layout Engineering, Systems Integration, Supply and Installation, and Service and Hypercare.",
+  },
+  {
+    time: "0:54",
+    seconds: 54,
+    title: "One company, one platform",
+    text: "Nexora is the masterbrand; SmartFlow 360 is the platform every project runs on, with four modules: Diagnose, Pick, Sort and Care.",
+  },
+  {
+    time: "1:07",
+    seconds: 67,
+    title: "Five project stages",
+    text: "Diagnose, Design, Build and FAT, Install and SAT, and Hypercare.",
+  },
+  {
+    time: "1:25",
+    seconds: 85,
+    title: "Where we work",
+    text: "Two offices, Lima and Arequipa, with projects live in Lima, Callao and Arequipa.",
+  },
+  {
+    time: "1:42",
+    seconds: 102,
+    title: "Before and after",
+    text: "Verified results at Moda Andina Logistics, Pacífico Beauty and TecnoSur Distribución.",
+  },
+  {
+    time: "2:10",
+    seconds: 130,
+    title: "Why operations teams choose Nexora",
+    text: "Your WMS stays, and every result is verified at SAT and in 16-hour load tests.",
+  },
+  { time: "2:24", seconds: 144, title: "Start with a free flow diagnosis", text: "Two weeks on your floor. One report. No commitment." },
 ];

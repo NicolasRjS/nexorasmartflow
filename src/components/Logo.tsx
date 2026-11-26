@@ -1,54 +1,27 @@
+import Image from "next/image";
 import Link from "next/link";
 
-/** The Nexora app-icon mark: racks, a route through them, start dot and arrow. */
-export function LogoMark({ className = "h-10 w-10", title }: { className?: string; title?: string }) {
-  return (
-    <svg
-      viewBox="0 0 300 300"
-      className={className}
-      role={title ? "img" : undefined}
-      aria-hidden={title ? undefined : true}
-      aria-label={title}
-    >
-      <rect width="300" height="300" rx="64" fill="#102C3B" />
-      <g fill="#27526A">
-        <rect x="63" y="51" width="37" height="189" rx="7" />
-        <rect x="131" y="51" width="38" height="189" rx="7" />
-        <rect x="200" y="51" width="37" height="189" rx="7" />
-      </g>
-      <path
-        d="M46 232V137H127V200H196V85H234"
-        fill="none"
-        stroke="#35B7AA"
-        strokeWidth="24"
-        strokeLinejoin="round"
-      />
-      <polygon points="230,59 267,85 230,111" fill="#F4B544" />
-      <circle cx="46" cy="240" r="22" fill="#F4B544" />
-    </svg>
-  );
+const LOCKUP_LIGHT = "/images/logo/nexora-lockup-light.png"; // for light backgrounds
+const LOCKUP_DARK = "/images/logo/nexora-lockup-dark.png"; // for navy backgrounds
+const MARK = "/images/logo/nexora-mark-square.png";
+
+/** The Nexora app-icon mark (racks, a route through them, start dot and arrow) on its navy square. */
+export function LogoMark({ className = "h-10 w-10", alt = "" }: { className?: string; alt?: string }) {
+  return <Image src={MARK} alt={alt} width={512} height={512} className={className} />;
 }
 
+/** Full logo lockup linking home. `dark` picks the variant made for navy backgrounds. */
 export function Logo({ dark = false }: { dark?: boolean }) {
   return (
-    <Link
-      href="/"
-      className="group flex items-center gap-3 rounded-md"
-      aria-label="Nexora Intralogistics Solutions, home"
-    >
-      <LogoMark className="h-11 w-11 shrink-0 transition-transform group-hover:scale-105" />
-      <span className="flex flex-col leading-none">
-        <span
-          className={`font-display text-xl font-bold tracking-[0.2em] ${dark ? "text-white" : "text-navy"}`}
-        >
-          NEXORA
-        </span>
-        <span
-          className={`mt-1.5 font-display text-[0.6rem] font-medium tracking-[0.24em] ${dark ? "text-teal" : "text-deep"}`}
-        >
-          INTRALOGISTICS SOLUTIONS
-        </span>
-      </span>
+    <Link href="/" className="group flex shrink-0 items-center rounded-md" aria-label="Nexora Intralogistics Solutions, home">
+      <Image
+        src={dark ? LOCKUP_DARK : LOCKUP_LIGHT}
+        alt=""
+        width={640}
+        height={130}
+        priority={!dark}
+        className="h-8 w-auto transition-transform duration-200 group-hover:scale-[1.02] sm:h-10"
+      />
     </Link>
   );
 }

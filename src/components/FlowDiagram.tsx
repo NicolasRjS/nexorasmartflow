@@ -1,164 +1,80 @@
 import { flowSteps, type FlowMode } from "@/content/data";
 
-const styles: Record<FlowMode, { fill: string; stroke: string; text: string; badge: string; badgeText: string }> = {
-  Automated: { fill: "#102C3B", stroke: "#102C3B", text: "#FFFFFF", badge: "#35B7AA", badgeText: "#102C3B" },
-  Assisted: { fill: "#E3F4F2", stroke: "#14636B", text: "#102C3B", badge: "#14636B", badgeText: "#FFFFFF" },
-  Manual: { fill: "#FFFFFF", stroke: "#F4B544", text: "#102C3B", badge: "#F4B544", badgeText: "#102C3B" },
+const tone: Record<FlowMode, string> = {
+  Automated: "border-navy bg-navy text-white",
+  Assisted: "border-deep bg-mint text-navy",
+  Manual: "border-amber bg-white text-navy",
 };
 
-const splitName = (name: string) => (name.includes(" & ") ? name.replace(" & ", " &\n").split("\n") : [name]);
+const badge: Record<FlowMode, string> = {
+  Automated: "bg-teal text-navy",
+  Assisted: "bg-deep text-white",
+  Manual: "bg-amber text-navy",
+};
 
-const description =
-  "Material flow in SmartFlow 360: order release (automated), picking (assisted), scanning (automated), conveyor and sortation (automated), packing (manual), staging (assisted) and dispatch (assisted). About 5% of units follow a separate manual oversize lane from picking to packing that bypasses the conveyor.";
+const PICK = 1; // Picking
+const PACK = 4; // Packing
 
-function StepBox({ x, y, w, h, i }: { x: number; y: number; w: number; h: number; i: number }) {
-  const step = flowSteps[i];
-  const s = styles[step.mode];
-  const lines = splitName(step.name);
-  const font = "var(--font-poppins), sans-serif";
-  return (
-    <g>
-      <rect x={x} y={y} width={w} height={h} rx="12" fill={s.fill} stroke={s.stroke} strokeWidth="2" />
-      <text x={x + 14} y={y + 22} fill={s.text} fontFamily={font} fontSize="12" opacity="0.8">
-        {String(i + 1).padStart(2, "0")}
-      </text>
-      {lines.map((line, li) => (
-        <text
-          key={line}
-          x={x + w / 2}
-          y={y + h / 2 - (lines.length - 1) * 9 + li * 18 + 2}
-          textAnchor="middle"
-          fill={s.text}
-          fontFamily={font}
-          fontSize="15"
-          fontWeight="600"
-        >
-          {line}
-        </text>
-      ))}
-      <rect x={x + w / 2 - 42} y={y + h - 26} width="84" height="18" rx="9" fill={s.badge} />
-      <text
-        x={x + w / 2}
-        y={y + h - 13}
-        textAnchor="middle"
-        fill={s.badgeText}
-        fontFamily={font}
-        fontSize="10"
-        fontWeight="700"
-        letterSpacing="1"
-      >
-        {step.mode.toUpperCase()}
-      </text>
-    </g>
-  );
-}
-
+/** Material flow in seven steps. HTML, not SVG, so the labels stay readable at every width. */
 export function FlowDiagram() {
-  // Desktop: one row. Mobile: one column.
-  const W = 132;
-  const H = 104;
-  const gap = 24;
-  const mW = 230;
-  const mH = 76;
-  const mGap = 26;
-
   return (
-    <figure className="rounded-2xl border border-line bg-white p-4 md:p-8">
-      <svg viewBox="0 0 1112 290" className="hidden h-auto w-full md:block" role="img" aria-label={description}>
-        <defs>
-          <marker id="flow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-            <path d="M0 0L10 5L0 10z" fill="#14636B" />
-          </marker>
-        </defs>
-        {flowSteps.map((_, i) => {
-          const x = 8 + i * (W + gap);
-          return (
-            <g key={i}>
-              <StepBox x={x} y={30} w={W} h={H} i={i} />
+    <figure className="rounded-3xl border border-line bg-white p-5 md:p-8">
+      {/* Wide screens: one row, with the oversize lane drawn underneath. */}
+      <div className="hidden lg:block">
+        <ol className="grid grid-cols-7 gap-4" aria-label="Material flow steps">
+          {flowSteps.map((s, i) => (
+            <li key={s.name} className="relative">
+              <div className={`flex h-36 flex-col justify-between rounded-2xl border-2 p-3.5 ${tone[s.mode]}`}>
+                <span className="font-display text-sm opacity-80 tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+                <span className="font-display text-base leading-snug font-semibold">{s.name}</span>
+                <span className={`self-start rounded-full px-2.5 py-0.5 font-display text-xs font-bold ${badge[s.mode]}`}>
+                  {s.mode}
+                </span>
+              </div>
               {i < flowSteps.length - 1 && (
-                <line
-                  x1={x + W + 2}
-                  y1={30 + H / 2}
-                  x2={x + W + gap - 3}
-                  y2={30 + H / 2}
-                  stroke="#14636B"
-                  strokeWidth="2.5"
-                  markerEnd="url(#flow-arrow)"
-                />
+                <svg
+                  viewBox="0 0 16 16"
+                  className="absolute top-1/2 -right-4 z-10 h-4 w-4 -translate-y-1/2 text-deep"
+                  aria-hidden="true"
+                >
+                  <path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               )}
-            </g>
-          );
-        })}
-        {/* Oversize lane: picking -> packing, bypassing scanning and conveyor */}
-        <path
-          d={`M${8 + 1 * (W + gap) + W / 2} ${30 + H} V214 H${8 + 4 * (W + gap) + W / 2} V${30 + H + 6}`}
-          fill="none"
-          stroke="#E0A02E"
-          strokeWidth="3"
-          strokeDasharray="8 6"
-          markerEnd="url(#flow-arrow)"
-        />
-        <text
-          x={8 + 2.5 * (W + gap) + W / 2}
-          y="244"
-          textAnchor="middle"
-          fill="#102C3B"
-          fontFamily="var(--font-poppins), sans-serif"
-          fontSize="14"
-          fontWeight="600"
-        >
-          Oversize lane · about 5% of units · manual, WMS-directed, scanned
-        </text>
-      </svg>
+            </li>
+          ))}
+        </ol>
+        <div className="grid grid-cols-7 gap-4" aria-hidden="true">
+          <div
+            className="relative h-14 rounded-b-2xl border-x-[3px] border-b-[3px] border-dashed border-amber-dark"
+            style={{ gridColumn: `${PICK + 1} / ${PACK + 2}`, marginInline: "calc((100% - 3rem) / 8)" }}
+          >
+            <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white px-3 font-display text-sm font-semibold whitespace-nowrap">
+              Oversize lane · about 5% of units · manual, WMS-directed, scanned
+            </span>
+          </div>
+        </div>
+      </div>
 
-      <svg viewBox="0 0 340 740" className="mx-auto h-auto w-full max-w-sm md:hidden" role="img" aria-label={description}>
-        <defs>
-          <marker id="flow-arrow-m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-            <path d="M0 0L10 5L0 10z" fill="#14636B" />
-          </marker>
-        </defs>
-        {flowSteps.map((_, i) => {
-          const y = 8 + i * (mH + mGap);
-          return (
-            <g key={i}>
-              <StepBox x={10} y={y} w={mW} h={mH} i={i} />
-              {i < flowSteps.length - 1 && (
-                <line
-                  x1={10 + mW / 2}
-                  y1={y + mH + 2}
-                  x2={10 + mW / 2}
-                  y2={y + mH + mGap - 3}
-                  stroke="#14636B"
-                  strokeWidth="2.5"
-                  markerEnd="url(#flow-arrow-m)"
-                />
-              )}
-            </g>
-          );
-        })}
-        <path
-          d={`M${10 + mW} ${8 + 1 * (mH + mGap) + mH / 2} H300 V${8 + 4 * (mH + mGap) + mH / 2} H${10 + mW + 6}`}
-          fill="none"
-          stroke="#E0A02E"
-          strokeWidth="3"
-          strokeDasharray="8 6"
-          markerEnd="url(#flow-arrow-m)"
-        />
-        <text
-          x="318"
-          y={8 + 2.5 * (mH + mGap) + mH / 2}
-          textAnchor="middle"
-          fill="#102C3B"
-          fontFamily="var(--font-poppins), sans-serif"
-          fontSize="13"
-          fontWeight="600"
-          transform={`rotate(90 318 ${8 + 2.5 * (mH + mGap) + mH / 2})`}
-        >
-          Oversize lane
-        </text>
-      </svg>
+      {/* Narrow screens: one column. */}
+      <ol className="space-y-2 lg:hidden" aria-label="Material flow steps">
+        {flowSteps.map((s, i) => (
+          <li key={s.name}>
+            <div className={`flex items-center gap-3 rounded-2xl border-2 px-4 py-3 ${tone[s.mode]}`}>
+              <span className="font-display text-sm opacity-80 tabular-nums">{String(i + 1).padStart(2, "0")}</span>
+              <span className="flex-1 font-display font-semibold">{s.name}</span>
+              <span className={`rounded-full px-2.5 py-0.5 font-display text-xs font-bold ${badge[s.mode]}`}>{s.mode}</span>
+            </div>
+            {(i === PICK || i === PACK) && (
+              <p className="mt-1 ml-4 flex items-center gap-2 text-sm font-semibold text-navy">
+                <span className="h-0 w-6 border-t-[3px] border-dashed border-amber-dark" aria-hidden="true" />
+                {i === PICK ? "Oversize lane leaves here" : "Oversize lane rejoins here"}
+              </p>
+            )}
+          </li>
+        ))}
+      </ol>
 
-      <figcaption className="mt-6 grid gap-4 border-t border-line pt-5 text-sm md:grid-cols-[auto_1fr] md:gap-8">
+      <figcaption className="mt-8 grid gap-4 border-t border-line pt-5 text-sm md:grid-cols-[auto_1fr] md:gap-8">
         <ul className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Legend">
           <li className="flex items-center gap-2">
             <span className="h-4 w-4 rounded bg-navy" aria-hidden="true" /> Automated
@@ -171,8 +87,8 @@ export function FlowDiagram() {
           </li>
         </ul>
         <p className="text-slate">
-          About 5% of units (over 30 kg or larger than 60 × 40 × 40 cm) follow a separate manual lane: directed by
-          the WMS, scanned, and kept off the conveyor.
+          About 5% of units (over 30 kg or larger than 60 × 40 × 40 cm) follow a separate manual lane: directed by the
+          WMS, scanned, and kept off the conveyor.
         </p>
       </figcaption>
     </figure>

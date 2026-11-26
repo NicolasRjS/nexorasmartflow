@@ -1,5 +1,5 @@
 // Capacity planning math for the Capacity Planner page.
-// Planning rates come from the SmartFlow 360 engineering basis.
+// Planning rates come from the SmartFlow 360 engineering basis; the default inputs are a neutral example.
 
 export const RATES = {
   unitsPerPickerHour: 100,
@@ -8,27 +8,32 @@ export const RATES = {
   headroom: 0.15,
 } as const;
 
-export const REFERENCE_DESIGN = {
-  ordersPerDay: 25000,
-  pickers: 50,
-  packStations: 40,
-  sortLanes: 3,
-} as const;
-
 export type Field = "orders" | "hours" | "factor" | "unitsPerOrder";
 
 export const FIELDS: Record<
   Field,
-  { label: string; help: string; min: number; max: number; step: number; default: number; integer?: boolean }
+  {
+    label: string;
+    help: string;
+    min: number;
+    max: number;
+    step: number;
+    default: number;
+    integer?: boolean;
+    unit?: string;
+    param: string;
+  }
 > = {
   orders: {
     label: "Orders on the peak day",
-    help: "Total orders shipped on your busiest day.",
+    help: "Total orders shipped on your busiest day. Digits only, for example 12000.",
     min: 1,
     max: 500000,
     step: 100,
-    default: 25000,
+    default: 12000,
     integer: true,
+    unit: "orders",
+    param: "orders",
   },
   hours: {
     label: "Operating hours",
@@ -37,6 +42,8 @@ export const FIELDS: Record<
     max: 24,
     step: 0.5,
     default: 16,
+    unit: "h",
+    param: "hours",
   },
   factor: {
     label: "Peak-hour factor",
@@ -45,6 +52,8 @@ export const FIELDS: Record<
     max: 3,
     step: 0.05,
     default: 1.3,
+    unit: "×",
+    param: "factor",
   },
   unitsPerOrder: {
     label: "Units per order",
@@ -52,7 +61,9 @@ export const FIELDS: Record<
     min: 0.1,
     max: 50,
     step: 0.1,
-    default: 2.1,
+    default: 2,
+    unit: "units",
+    param: "units",
   },
 };
 
@@ -61,8 +72,13 @@ export type Inputs = Record<Field, number>;
 /** Returns an error message for a raw input value, or null if valid. */
 export function validate(field: Field, raw: string): string | null {
   const f = FIELDS[field];
-  if (raw.trim() === "") return "Enter a value.";
-  const n = Number(raw);
+  const value = raw.trim();
+  if (value === "") return "Enter a value.";
+  if (f.integer && /^\d{1,3}([.,\s]\d{3})+$/.test(value)) {
+    return `Remove the thousands separator: type ${value.replace(/[.,\s]/g, "")}.`;
+  }
+  if (!f.integer && /^\d+,\d+$/.test(value)) return `Use a point for decimals: ${value.replace(",", ".")}.`;
+  const n = Number(value);
   if (!Number.isFinite(n)) return "Enter a number.";
   if (f.integer && !Number.isInteger(n)) return "Enter a whole number.";
   if (n < f.min || n > f.max) {
@@ -83,12 +99,22 @@ export function calculate({ orders, hours, factor, unitsPerOrder }: Inputs) {
     sortLanes: ceil((peakUnitsPerHour * load) / RATES.unitsPerSortLaneHour) + 1,
   });
 
+  const withHeadroom = size(1 + RATES.headroom);
+
+  // Capacity each stage provides at the headroom size, in units per hour (sortation with one lane down).
+  const capacity = {
+    pickers: withHeadroom.pickers * RATES.unitsPerPickerHour,
+    packStations: withHeadroom.packStations * RATES.ordersPerPackStationHour * unitsPerOrder,
+    sortLanes: (withHeadroom.sortLanes - 1) * RATES.unitsPerSortLaneHour,
+  };
+
   return {
     avgOrdersPerHour,
     peakOrdersPerHour,
     peakUnitsPerHour,
     minimum: size(1),
-    withHeadroom: size(1 + RATES.headroom),
+    withHeadroom,
+    capacity,
   };
 }
 
