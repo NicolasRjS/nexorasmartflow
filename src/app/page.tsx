@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ConveyorBand } from "@/components/ConveyorBand";
 import { HeroIllustration } from "@/components/HeroIllustration";
+import { InstitutionalVideo } from "@/components/InstitutionalVideo";
 import { Arrow, CtaBand, HeroGrid, SectionHeading } from "@/components/ui";
 import { modules, notIncluded, reasons } from "@/content/data";
 import { site } from "@/content/site";
@@ -156,6 +157,29 @@ export default function Home() {
               See how we deliver and support every project
             </Link>
           </p>
+        </div>
+      </section>
+
+      {/* Brochure and video */}
+      <section className="bg-surface py-16 md:py-24" aria-labelledby="glance-title">
+        <div className="container-x grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:items-center">
+          <InstitutionalVideo />
+          <div>
+            <SectionHeading
+              id="glance-title"
+              eyebrow="Nexora at a glance"
+              title="Watch our story. Take the brochure with you."
+              lead="Our institutional video shows who we are and how every project runs. The SmartFlow 360 brochure sums up the solution on one sheet."
+            />
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/media#brochure" className="btn btn-deep">
+                View the brochure
+              </Link>
+              <Link href="/media" className="btn btn-outline">
+                Brochure & Video page
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 

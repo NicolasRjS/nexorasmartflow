@@ -44,7 +44,14 @@ export default function AboutPage() {
         eyebrow="About & Team"
         title="We help distribution centers do more with the space they have"
         lead="Nexora Intralogistics Solutions is an intralogistics solution provider. We improve distribution-center throughput, picking efficiency, system visibility and operational safety, without replacing your building or your WMS."
-      />
+      >
+        <Link href="/media#video" className="btn btn-primary">
+          Watch our institutional video
+        </Link>
+        <a href="#team" className="btn btn-outline-light">
+          Meet the team
+        </a>
+      </PageHero>
 
       <section className="py-16 md:py-24" aria-labelledby="focus-title">
         <div className="container-x grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:items-start">

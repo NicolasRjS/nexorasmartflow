@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { externalResources, mailtoHref, nav, site } from "@/content/site";
+import { externalResources, mailtoHref, nav, secondaryNav, site } from "@/content/site";
 import { ConveyorBand } from "./ConveyorBand";
 import { ExternalLink } from "./ExternalLink";
 import { Logo } from "./Logo";
@@ -21,7 +21,7 @@ export function SiteFooter() {
         <nav aria-label="Footer">
           <h2 className="font-display text-sm font-semibold tracking-[0.14em] text-white uppercase">Pages</h2>
           <ul className="mt-4 space-y-2 text-sm">
-            {nav.map((item) => (
+            {[...nav, ...secondaryNav].map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="underline-offset-4 hover:text-white hover:underline">
                   {item.label}

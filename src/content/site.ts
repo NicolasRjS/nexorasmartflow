@@ -8,16 +8,32 @@ export const site = {
   headline: "Modernizing Fulfillment. Unlocking Growth.",
   url: "https://nexorasmartflow.vercel.app",
 
-  contactEmail: "contact@nexora.com" as string,
+  contactEmail: "contacto@nexorasmartflow.pe" as string,
   // Optional. Leave empty ("") to hide.
-  phone: "" as string,
-  location: "" as string,
+  phone: "+51 1 612 8400" as string,
+  location: "Lima · Arequipa, Peru" as string,
 
   // true: show full names on About & Team. false: show roles only.
   showTeamNames: true,
 
   description:
     "Nexora Intralogistics Solutions modernizes existing distribution centers. SmartFlow 360 adds capacity, cuts walking and makes the floor safer, inside your building and with your WMS.",
+} as const;
+
+// Same details as the printed brochure.
+export const offices = [
+  { label: "Lima (head office)", address: "Av. Javier Prado Este 4200, Of. 1203, Surco, Lima" },
+  { label: "Arequipa (field office)", address: "Parque Industrial Río Seco, Cerro Colorado, Arequipa" },
+] as const;
+
+// Pages linked from the footer and from page content, outside the main navigation.
+export const secondaryNav = [{ href: "/media", label: "Brochure & Video" }] as const;
+
+export const media = {
+  video: "/media/nexora-institutional-video.mp4",
+  videoPoster: "/media/nexora-institutional-video-poster.jpg",
+  videoLength: "2:33",
+  brochurePdf: "/media/nexora-smartflow-360-brochure.pdf",
 } as const;
 
 export const mailtoHref = (subject = "SmartFlow 360 inquiry", body?: string) => {

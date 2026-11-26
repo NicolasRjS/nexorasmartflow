@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Arrow, PageHero, SectionHeading } from "@/components/ui";
-import { mailtoHref, site } from "@/content/site";
+import { mailtoHref, offices, site } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -78,14 +78,14 @@ export default function ContactPage() {
                   </dd>
                 </div>
               )}
-              {site.location && (
-                <div>
+              {offices.map((o) => (
+                <div key={o.label}>
                   <dt className="font-display text-sm font-semibold tracking-[0.12em] text-slate uppercase">
-                    Location
+                    {o.label}
                   </dt>
-                  <dd className="mt-1 text-lg">{site.location}</dd>
+                  <dd className="mt-1">{o.address}</dd>
                 </div>
-              )}
+              ))}
             </dl>
           </div>
 
@@ -131,8 +131,12 @@ export default function ContactPage() {
             Prefer to read first?{" "}
             <Link href="/results" className="prose-link">
               See verified results
-            </Link>{" "}
-            or{" "}
+            </Link>
+            ,{" "}
+            <Link href="/media" className="prose-link">
+              watch our video and get the brochure
+            </Link>
+            , or{" "}
             <Link href="/" className="prose-link">
               return to the home page
             </Link>

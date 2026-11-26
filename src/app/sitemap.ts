@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
-import { nav, site } from "@/content/site";
+import { nav, secondaryNav, site } from "@/content/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return nav.map((item) => ({ url: `${site.url}${item.href === "/" ? "" : item.href}` }));
+  return [...nav, ...secondaryNav].map((item) => ({ url: `${site.url}${item.href === "/" ? "" : item.href}` }));
 }
