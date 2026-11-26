@@ -52,7 +52,8 @@ export default function AboutPage() {
     <>
       <PageHero
         tone="light"
-        backdrop={<div aria-hidden="true" className="absolute inset-y-0 right-0 hidden w-[42%] bg-surface lg:block" />}
+        asideWide
+        backdrop={<div aria-hidden="true" className="absolute inset-y-0 right-0 hidden w-[48%] bg-surface lg:block" />}
         title="We help distribution centers do more with the space they have"
         lead="Nexora Intralogistics Solutions is an intralogistics solution provider. We improve distribution-center throughput, picking efficiency, system visibility and operational safety, without replacing your building or your WMS."
         actions={
@@ -73,23 +74,23 @@ export default function AboutPage() {
                 captions: "/media/nexora-institutional-video.vtt",
               },
             }}
-            className="group relative block aspect-video w-full cursor-pointer overflow-hidden rounded-3xl bg-navy-2 text-left"
+            className="raised group relative block aspect-video w-full cursor-pointer overflow-hidden rounded-3xl bg-navy-2 text-left lg:-mr-8 lg:w-[calc(100%+2rem)] xl:-mr-16 xl:w-[calc(100%+4rem)]"
             aria-label={`Play the Nexora institutional video (${media.videoLength})`}
           >
             <Image
               src={media.videoPoster}
               alt=""
               fill
-              sizes="(min-width: 1024px) 40vw, 100vw"
+              sizes="(min-width: 1024px) 55vw, 100vw"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
             <span className="absolute inset-0 bg-gradient-to-t from-navy via-navy/30 to-transparent" aria-hidden="true" />
-            <span className="absolute bottom-5 left-5 flex items-center gap-3 text-white" aria-hidden="true">
-              <span className="grid h-14 w-14 place-items-center rounded-full bg-amber text-navy shadow-lg transition-transform group-hover:scale-105">
-                <PlayIcon className="h-7 w-7" />
+            <span className="absolute bottom-6 left-6 flex items-center gap-4 text-white md:bottom-8 md:left-8" aria-hidden="true">
+              <span className="grid h-16 w-16 place-items-center rounded-full bg-amber text-navy shadow-lg transition-transform group-hover:scale-105 md:h-20 md:w-20">
+                <PlayIcon className="h-8 w-8 md:h-10 md:w-10" />
               </span>
               <span>
-                <span className="block font-display text-lg font-semibold">Our story in {media.videoLength}</span>
+                <span className="block font-display text-xl font-semibold md:text-2xl">Our story in {media.videoLength}</span>
                 <span className="block text-sm text-white/85">Founded in Lima in 2019</span>
               </span>
             </span>

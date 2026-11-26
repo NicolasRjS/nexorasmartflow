@@ -23,6 +23,7 @@ export function PageHero({
   aside,
   compact = false,
   tone = "navy",
+  asideWide = false,
   backdrop,
 }: {
   title: string;
@@ -32,6 +33,8 @@ export function PageHero({
   /** Shorter hero for tool pages, so the tool starts near the top of the screen. */
   compact?: boolean;
   tone?: HeroTone;
+  /** Give the aside (media) the larger column. */
+  asideWide?: boolean;
   /** Decorative layer behind the content (photo, blueprint grid, stage bars). */
   backdrop?: ReactNode;
 }) {
@@ -41,14 +44,18 @@ export function PageHero({
       {backdrop ?? (tone === "navy" ? <RackLines /> : null)}
       <div
         className={`container-x relative grid gap-10 ${compact ? "py-9 md:py-12" : "py-12 md:py-16 lg:py-20"} ${
-          aside ? "lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-center" : ""
+          aside
+            ? asideWide
+              ? "lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-14"
+              : "lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-center"
+            : ""
         }`}
       >
         <div>
           <Breadcrumbs dark={dark} />
           <h1
             className={`rise ${dark ? "text-white" : "text-navy"} ${
-              compact ? "h-section max-w-[22ch] md:text-5xl" : "display-2 max-w-[16ch]"
+              compact ? "h-section max-w-[22ch] md:text-5xl" : asideWide ? "display-2 max-w-[18ch] lg:text-[3.1rem]" : "display-2 max-w-[16ch]"
             }`}
           >
             {titleCase(title)}

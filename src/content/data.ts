@@ -266,26 +266,26 @@ export const customers: Customer[] = [
 
 export const team = [
   {
-    initials: "WR",
-    name: "Walter Nicolas Rojas Saravia",
+    initials: "NR",
+    name: "Nicolas Rojas Saravia",
     role: "Team Leader, Project Director",
     text: "Owns the contract, the client relationship and delivery accountability.",
   },
   {
     initials: "CP",
-    name: "Carlos Bryan Pereda Montes",
+    name: "Carlos Pereda Montes",
     role: "Project Manager (PMO)",
     text: "Master schedule, FAT and SAT milestones, budget control and blackout-window planning.",
   },
   {
     initials: "MV",
-    name: "Mathews Yarley Vargas Alvarado",
+    name: "Mathews Vargas Alvarado",
     role: "Solutions Architect",
     text: "Designs SmartFlow 360 end to end; owns KPI targets and acceptance criteria.",
   },
   {
     initials: "JC",
-    name: "Juan Pablo Cabanillas Huaman",
+    name: "Juan Pablo Cabanillas",
     role: "Systems and WMS Integration Lead",
     text: "WES and middleware, WMS interfaces, cybersecurity and capacity sizing.",
   },
@@ -297,19 +297,19 @@ export const team = [
   },
   {
     initials: "AR",
-    name: "Anyelina Judith Rivera Rubio",
+    name: "Anyelina Rivera Rubio",
     role: "Operations Analyst",
     text: "Baseline diagnosis: demand profile, bottlenecks, time studies and data validation.",
   },
   {
     initials: "AG",
-    name: "Alison Nicole Garcia Leon",
+    name: "Alison Garcia Leon",
     role: "Business Case and Risk Manager",
     text: "Business case, risk register and contract terms.",
   },
   {
     initials: "FS",
-    name: "Fernando Alonso Surco Cora",
+    name: "Fernando Surco Cora",
     role: "Commercial and Customer Success Lead",
     text: "Customer requirements, training, hypercare and long-term partnership.",
   },
