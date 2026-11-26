@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 type View = "before" | "after";
@@ -20,8 +21,8 @@ export function PickRouteToggle() {
     <div className="rounded-2xl border border-line bg-white p-5 md:p-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h4 className="text-xl font-semibold">Pick route: before and after</h4>
-          <p className="mt-1 text-sm text-slate">Verified at Moda Andina Logistics, Lima. Schematic, not to scale.</p>
+          <h4 className="text-xl font-semibold">Shorter walks, same orders</h4>
+          <p className="mt-1 text-sm text-slate">Engineering estimate for a typical mixed-order route. Schematic, not to scale.</p>
         </div>
         <div className="inline-flex rounded-lg border border-line bg-surface p-1" role="group" aria-label="Choose a view">
           {(["before", "after"] as const).map((v) => (
@@ -47,8 +48,8 @@ export function PickRouteToggle() {
           role="img"
           aria-label={
             before
-              ? "Before: a mixed order sends the picker through every aisle, about 1.1 kilometers per route."
-              : "With SmartFlow 360: fast movers sit closest to packing, so the route stays in one short zone, about 0.5 kilometers."
+              ? "Before: a mixed order sends the picker through every aisle, about 1.0 kilometer per route."
+              : "With SmartFlow 360: fast movers sit closest to packing, so the route stays in one short zone, 0.5 kilometers or less."
           }
         >
           {/* Pick zones (after) */}
@@ -96,17 +97,25 @@ export function PickRouteToggle() {
         <div aria-live="polite">
           <p className="eyebrow">{before ? "Before" : "With SmartFlow 360"}</p>
           <p className={`mt-2 font-display text-6xl font-bold ${before ? "text-before" : "text-deep"}`}>
-            {before ? "1.1 km" : "0.5 km"}
+            {before ? "≈1.0 km" : "≤0.5 km"}
           </p>
           <p className="mt-1 font-semibold">per pick route</p>
           <p className="mt-4 text-slate">
             {before
-              ? "A mixed order sent each picker through every aisle, end to end."
+              ? "A mixed order sends the picker through every aisle, end to end."
               : "ABC slotting puts the fastest movers closest to packing (amber), and zone picking keeps each route short."}
           </p>
-          {!before && <p className="chip mt-4">−55% walking</p>}
+          {!before && <p className="chip mt-4">Half the walking or less</p>}
         </div>
       </div>
+
+      <p className="mt-6 border-t border-line pt-5 text-sm">
+        <strong>Verified in operation:</strong> at Moda Andina Logistics, pick routes fell from 1.1 km to 0.5 km
+        (−55%).{" "}
+        <Link href="/results#moda-andina" className="prose-link">
+          See the Moda Andina results
+        </Link>
+      </p>
     </div>
   );
 }
