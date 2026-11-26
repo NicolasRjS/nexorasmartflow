@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="Nexora Intralogistics Solutions logo">
+  <rect width="300" height="300" rx="64" fill="#102C3B"/>
+  <g fill="#27526A">
+    <rect x="63" y="51" width="37" height="189" rx="7"/>
+    <rect x="131" y="51" width="38" height="189" rx="7"/>
+    <rect x="200" y="51" width="37" height="189" rx="7"/>
+  </g>
+  <path d="M46 232V137H127V200H196V85H234" fill="none" stroke="#35B7AA" stroke-width="24" stroke-linejoin="round"/>
+  <polygon points="230,59 267,85 230,111" fill="#F4B544"/>
+  <circle cx="46" cy="240" r="22" fill="#F4B544"/>
+</svg>

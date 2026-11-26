@@ -1,0 +1,112 @@
+"use client";
+
+import { useState } from "react";
+
+type View = "before" | "after";
+
+const aisleX = [70, 150, 230, 310, 390, 470];
+
+// Before: one picker walks every aisle, end to end (serpentine).
+const beforeRoute =
+  "M260 308 V292 H45 V30 H130 V280 H210 V30 H290 V280 H370 V30 H450 V280 H530 V30 H548 V292 H300 V308";
+// After: fast movers slotted near packing; a short loop within one pick zone.
+const afterRoute = "M258 308 V286 H210 V196 H290 V286 H302 V308";
+
+export function PickRouteToggle() {
+  const [view, setView] = useState<View>("before");
+  const before = view === "before";
+
+  return (
+    <div className="rounded-2xl border border-line bg-white p-5 md:p-8">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h4 className="text-xl font-semibold">Pick route: before and after</h4>
+          <p className="mt-1 text-sm text-slate">Verified at Moda Andina Logistics, Lima. Schematic, not to scale.</p>
+        </div>
+        <div className="inline-flex rounded-lg border border-line bg-surface p-1" role="group" aria-label="Choose a view">
+          {(["before", "after"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              aria-pressed={view === v}
+              onClick={() => setView(v)}
+              className={`min-h-11 rounded-md px-4 font-display text-sm font-semibold transition-colors ${
+                view === v ? "bg-navy text-white" : "text-navy hover:bg-white"
+              }`}
+            >
+              {v === "before" ? "Before" : "With SmartFlow 360"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-[1.6fr_1fr] lg:items-center">
+        <svg
+          viewBox="0 0 560 360"
+          className="h-auto w-full rounded-xl bg-surface"
+          role="img"
+          aria-label={
+            before
+              ? "Before: a mixed order sends the picker through every aisle, about 1.1 kilometers per route."
+              : "With SmartFlow 360: fast movers sit closest to packing, so the route stays in one short zone, about 0.5 kilometers."
+          }
+        >
+          {/* Pick zones (after) */}
+          {!before && (
+            <g opacity="0.9">
+              <rect x="20" y="24" width="160" height="256" fill="#E3F4F2" />
+              <rect x="180" y="24" width="180" height="256" fill="#FDF3DE" />
+              <rect x="360" y="24" width="180" height="256" fill="#E3F4F2" />
+            </g>
+          )}
+          {/* Racks */}
+          {aisleX.map((x) => (
+            <g key={x}>
+              <rect x={x} y="40" width="40" height="220" rx="5" fill="#CBD7DE" />
+              {!before && <rect x={x} y="200" width="40" height="60" rx="5" fill="#F4B544" />}
+            </g>
+          ))}
+          {/* Packing */}
+          <rect x="220" y="310" width="120" height="38" rx="8" fill="#102C3B" />
+          <text
+            x="280"
+            y="334"
+            textAnchor="middle"
+            fill="#FFFFFF"
+            fontFamily="var(--font-poppins), sans-serif"
+            fontSize="13"
+            fontWeight="600"
+            letterSpacing="1.5"
+          >
+            PACKING
+          </text>
+          {/* Route */}
+          <path
+            key={view}
+            d={before ? beforeRoute : afterRoute}
+            fill="none"
+            stroke={before ? "#C0392B" : "#14636B"}
+            strokeWidth="5"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            strokeDasharray={before ? "10 7" : undefined}
+          />
+        </svg>
+
+        <div aria-live="polite">
+          <p className="eyebrow">{before ? "Before" : "With SmartFlow 360"}</p>
+          <p className={`mt-2 font-display text-6xl font-bold ${before ? "text-before" : "text-deep"}`}>
+            {before ? "1.1 km" : "0.5 km"}
+          </p>
+          <p className="mt-1 font-semibold">per pick route</p>
+          <p className="mt-4 text-slate">
+            {before
+              ? "A mixed order sent each picker through every aisle, end to end."
+              : "ABC slotting puts the fastest movers closest to packing (amber), and zone picking keeps each route short."}
+          </p>
+          {!before && <p className="chip mt-4">−55% walking</p>}
+        </div>
+      </div>
+    </div>
+  );
+}
