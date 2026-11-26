@@ -37,12 +37,43 @@ export default function Home() {
                 See verified results
               </Link>
             </div>
+            <a href="#institutional-video" className="prose-link mt-6 inline-flex items-center gap-2 text-[0.95rem]">
+              <svg viewBox="0 0 20 20" className="h-5 w-5" aria-hidden="true">
+                <circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" strokeWidth="1.8" />
+                <path d="M8 6.5v7l5.5-3.5z" fill="currentColor" />
+              </svg>
+              Watch our 2:33 institutional video
+            </a>
           </div>
           <div className="mx-auto w-full max-w-lg">
             <HeroIllustration />
           </div>
         </div>
         <ConveyorBand />
+      </section>
+
+      {/* Institutional video: featured right after the hero */}
+      <section id="institutional-video" className="py-16 md:py-20" aria-labelledby="video-title">
+        <div className="container-x">
+          <SectionHeading
+            id="video-title"
+            eyebrow="Nexora institutional video"
+            title="See Nexora in two and a half minutes"
+            lead="Who we are, how every project runs and the results at three Peruvian operations."
+            center
+          />
+          <div className="mx-auto mt-10 max-w-4xl">
+            <InstitutionalVideo />
+          </div>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link href="/media#brochure" className="btn btn-deep">
+              View the brochure
+            </Link>
+            <Link href="/media#video" className="btn btn-outline">
+              Read what the video shows
+            </Link>
+          </div>
+        </div>
       </section>
 
       {/* Verified results strip */}
@@ -157,29 +188,6 @@ export default function Home() {
               See how we deliver and support every project
             </Link>
           </p>
-        </div>
-      </section>
-
-      {/* Brochure and video */}
-      <section className="bg-surface py-16 md:py-24" aria-labelledby="glance-title">
-        <div className="container-x grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:items-center">
-          <InstitutionalVideo />
-          <div>
-            <SectionHeading
-              id="glance-title"
-              eyebrow="Nexora at a glance"
-              title="Watch our story. Take the brochure with you."
-              lead="Our institutional video shows who we are and how every project runs. The SmartFlow 360 brochure sums up the solution on one sheet."
-            />
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/media#brochure" className="btn btn-deep">
-                View the brochure
-              </Link>
-              <Link href="/media" className="btn btn-outline">
-                Brochure & Video page
-              </Link>
-            </div>
-          </div>
         </div>
       </section>
 
