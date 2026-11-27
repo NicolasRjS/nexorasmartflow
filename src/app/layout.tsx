@@ -5,6 +5,7 @@ import { BackToTop } from "@/components/nav/BackToTop";
 import { PageJourney } from "@/components/nav/PageJourney";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { VideoGuard } from "@/components/VideoGuard";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -66,6 +67,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </main>
           <SiteFooter />
           <BackToTop />
+          <VideoGuard />
         </DemoProvider>
       </body>
     </html>
