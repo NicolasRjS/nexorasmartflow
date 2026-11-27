@@ -5,8 +5,9 @@ import { ChapterVideo } from "@/components/ChapterVideo";
 import { HeroBackground, HeroRoute } from "@/components/HeroMedia";
 import { ActionButton } from "@/components/interactive/DemoProvider";
 import { PickRouteToggle } from "@/components/PickRouteToggle";
+import { Testimonials } from "@/components/Testimonials";
 import { Arrow, CtaBand, PlayIcon, SectionHeading } from "@/components/ui";
-import { customers, modules, notIncluded, reasons, videoScenes } from "@/content/data";
+import { customers, modules, notIncluded, reasons, testimonials, videoScenes } from "@/content/data";
 import { media, site } from "@/content/site";
 
 const highlights = [
@@ -280,6 +281,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Customer comments, right after the customer results */}
+      <Testimonials items={testimonials} />
+
       {/* Reasons */}
       <section className="py-16 md:py-24" aria-labelledby="reasons-title">
         <div className="container-x">
@@ -295,10 +299,13 @@ export default function Home() {
               </li>
             ))}
           </ul>
-          <p className="mt-6">
+          <p className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
             <Link href="/implementation" className="arrow-link">
               See how we deliver and support every project
               <Arrow />
+            </Link>
+            <Link href="/implementation#support" className="prose-link text-[0.95rem] font-normal">
+              Customer service &amp; support
             </Link>
           </p>
         </div>

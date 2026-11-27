@@ -13,24 +13,61 @@ export const metadata: Metadata = {
     "Six delivery stages, acceptance gates from FAT to final acceptance, WMS integration and security, training, a 24-month warranty and 90 days of hypercare.",
 };
 
-const support = [
+// Customer Service & Support: what the customer gets, response targets, then the detail on demand.
+const supportOffer = [
+  { title: "24/7 support", text: "Phone, email, ticket portal and secure remote diagnosis" },
+  { title: "90-day hypercare", text: "At least 2 technicians on site per shift, 6 days a week" },
+  { title: "Resident technician", text: "On site Monday to Saturday after hypercare, during the warranty" },
+  { title: "24-month warranty", text: "Equipment, software and integration, from final acceptance" },
+  { title: "Spare parts", text: "Critical spares on site and parts availability for 10 years" },
+  { title: "Training", text: "40 hours per technician, 85% pass mark, available in Spanish" },
+];
+
+const responseLevels = [
   {
-    value: "24",
-    unit: "months",
-    title: "Warranty",
-    text: "Every SmartFlow 360 system is covered for 24 months.",
+    level: "Critical",
+    meaning: "Operation stopped or safety hazard",
+    targets: ["Call answered in 15 min", "Remote response in 30 min", "On site in 4 h (2 h in campaigns)", "Restored in 8 h"],
+    dot: "bg-before",
   },
   {
-    value: "90",
-    unit: "days",
-    title: "Hypercare",
-    text: "Close support after go-live, then a resident technician plus 24/7 remote support.",
+    level: "Major",
+    meaning: "Capacity down more than 20%",
+    targets: ["Remote response in 2 h", "On site in 8 h", "Restored in 24 h"],
+    dot: "bg-amber",
   },
   {
-    value: "40",
-    unit: "hours",
-    title: "Training per technician",
-    text: "Hands-on training with an 85% pass mark, so your team runs and maintains the system.",
+    level: "Minor",
+    meaning: "Small defect",
+    targets: ["Response in 2 business days"],
+    dot: "bg-teal",
+  },
+];
+
+const supportDetail: { title: string; text?: string; steps?: string[]; plans?: { name: string; text: string }[] }[] = [
+  {
+    title: "Preventive maintenance",
+    text: "Daily inspections, weekly alignment checks, monthly lubrication and safety tests, quarterly thermography and backup tests, and a full annual safety review. Work is scheduled outside operating peaks.",
+  },
+  {
+    title: "Spare parts",
+    text: "The on-site kit covers at least 95% of failures expected in the first 24 months. Other parts arrive in 5 business days (available in Peru) or 15 business days (imported).",
+  },
+  {
+    title: "Escalation for critical events",
+    steps: ["Resident team immediately", "On-call engineer at 1 hour", "Technical lead at 2 hours", "Project Director at 4 hours"],
+  },
+  {
+    title: "Reports",
+    text: "Live dashboards, a monthly report on availability and repair times, and a quarterly business review.",
+  },
+  {
+    title: "After the warranty",
+    plans: [
+      { name: "Remote Care", text: "24/7 remote support and software updates" },
+      { name: "Preventive Care", text: "Remote Care plus scheduled visits and spares replenishment" },
+      { name: "Resident Care", text: "Preventive Care plus a resident technician" },
+    ],
   },
 ];
 
@@ -55,7 +92,7 @@ const sections = [
   { id: "acceptance", label: "Acceptance gates" },
   { id: "integration", label: "WMS integration and security" },
   { id: "safety", label: "Safety" },
-  { id: "support", label: "Training, warranty and hypercare" },
+  { id: "support", label: "Customer service & support" },
 ];
 
 const layers = [
@@ -260,29 +297,93 @@ export default function ImplementationPage() {
         </div>
       </section>
 
-      {/* Support: three commitments in one ruled row */}
+      {/* Customer Service & Support: what you get and how fast we respond first; the detail opens on demand */}
       <section id="support" className="scroll-mt-36 py-16 md:py-24" aria-labelledby="support-title">
         <div className="container-x">
           <SectionHeading
             id="support-title"
-            title="Training, warranty and hypercare"
-            lead="Go-live is not the end of the project. We train your team, support the first months closely, and keep a technician on site."
+            title="Customer Service & Support"
+            lead="Go-live is not the end of the project. We stay with you, on site and remotely, with response times you can measure."
           />
-          <ul className="mt-12 grid border-t-2 border-navy md:grid-cols-3">
-            {support.map((s, i) => (
-              <li
-                key={s.title}
-                className={`py-8 md:px-8 ${i > 0 ? "border-t border-line md:border-t-0 md:border-l" : "md:pl-0"}`}
-              >
-                <p className="font-display">
-                  <span className="text-6xl font-bold text-deep">{s.value}</span>{" "}
-                  <span className="text-xl font-semibold text-slate">{s.unit}</span>
-                </p>
-                <h3 className="mt-3 text-xl font-bold">{titleCase(s.title)}</h3>
-                <p className="mt-2 text-slate">{s.text}</p>
+
+          <h3 className="mt-12 text-2xl font-bold">{titleCase("What you get")}</h3>
+          <ul className="mt-5 grid border-t-2 border-navy sm:grid-cols-2 lg:grid-cols-3">
+            {supportOffer.map((s) => (
+              <li key={s.title} className="border-b border-line py-5 sm:pr-6">
+                <p className="font-display text-lg font-bold text-deep">{s.title}</p>
+                <p className="mt-1 text-slate">{s.text}</p>
               </li>
             ))}
           </ul>
+
+          <h3 className="mt-14 text-2xl font-bold">{titleCase("How fast we respond")}</h3>
+          <ul className="mt-5 space-y-3">
+            {responseLevels.map((r) => (
+              <li key={r.level} className="tile-soft grid gap-4 rounded-2xl p-5 md:grid-cols-[14rem_1fr] md:items-center md:gap-8 md:p-6">
+                <div>
+                  <p className="flex items-center gap-2.5 font-display text-lg font-bold">
+                    <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${r.dot}`} aria-hidden="true" />
+                    {r.level}
+                  </p>
+                  <p className="mt-1 text-sm text-slate">{r.meaning}</p>
+                </div>
+                <ul className="flex flex-wrap gap-2" aria-label={`${r.level} response targets`}>
+                  {r.targets.map((t) => (
+                    <li key={t} className="rounded-full border border-line bg-white px-3 py-1.5 text-[0.95rem]">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-sm text-slate">Our targets for each level.</p>
+
+          <div className="mt-14 border-t-2 border-navy">
+            {supportDetail.map((d) => (
+              <details key={d.title} className="group border-b border-line">
+                <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 font-display text-lg font-semibold [&::-webkit-details-marker]:hidden">
+                  {titleCase(d.title)}
+                  <svg
+                    viewBox="0 0 16 16"
+                    className="h-4 w-4 shrink-0 text-deep transition-transform group-open:rotate-180"
+                    aria-hidden="true"
+                  >
+                    <path d="M3.5 6l4.5 4.5L12.5 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </summary>
+                <div className="measure pb-6 text-slate">
+                  {d.text && <p>{d.text}</p>}
+                  {d.steps && (
+                    <ol className="space-y-2">
+                      {d.steps.map((step, i) => (
+                        <li key={step} className="flex items-baseline gap-3">
+                          <span className="font-display text-sm font-bold text-deep">{i + 1}</span>
+                          <span>{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                  {d.plans && (
+                    <ul className="space-y-2">
+                      {d.plans.map((plan) => (
+                        <li key={plan.name}>
+                          <strong className="font-display text-navy">{plan.name}:</strong> {plan.text}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </details>
+            ))}
+          </div>
+
+          <p className="mt-10">
+            <Link href="/contact" className="btn btn-deep">
+              {titleCase("Talk to our support team")}
+              <Arrow />
+            </Link>
+          </p>
         </div>
       </section>
 

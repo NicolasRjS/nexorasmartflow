@@ -368,3 +368,35 @@ export const videoScenes = [
   },
   { time: "2:24", seconds: 144, title: "Start with a free flow diagnosis", text: "Two weeks on your floor. One report. No commitment." },
 ];
+
+// Home page testimonials. Illustrative comments from fictional customers, created for an academic project.
+// Edit this list to change the cards; the component renders whatever is here.
+export type Testimonial = {
+  /** Stars out of 5. */
+  rating: number;
+  comment: string;
+  customer: string;
+  /** Matches a customer id above, to link the card to that customer's results. */
+  customerId?: string;
+};
+
+export const testimonials: Testimonial[] = [
+  {
+    rating: 5,
+    comment: "Our pick routes are less than half as long, and peak days feel under control.",
+    customer: "Moda Andina Logistics",
+    customerId: "moda-andina",
+  },
+  {
+    rating: 5,
+    comment: "Same-day dispatch went from 89% to 98.5%. Our cutoff is no longer a daily race.",
+    customer: "Pacífico Beauty",
+    customerId: "pacifico-beauty",
+  },
+  {
+    rating: 4,
+    comment: "The floor is safer and trucks turn around much faster. The team needed a few weeks to adapt.",
+    customer: "TecnoSur Distribución",
+    customerId: "tecnosur",
+  },
+];
